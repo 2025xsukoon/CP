@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You for Your Payment!</title>
+    <title>Gupta Medical Store - Payment & Review</title>
     <style>
-        /* Basic styling for a clean, centered look */
+        /* General Body and Container Styling */
         body {
-            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            font-family: 'Inter', sans-serif; /* Using Inter font */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #e8f5e9; /* Light green background for a "thank you" feel */
+            background-color: #f0f2f5; /* Light grey background */
             color: #333;
             text-align: center;
             padding: 20px;
+            box-sizing: border-box; /* Include padding in width/height */
         }
         .container {
             background-color: #ffffff; /* White background for the content box */
@@ -24,19 +25,48 @@
             border-radius: 12px; /* Rounded corners */
             box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Soft shadow */
             max-width: 500px;
-            width: 100%; /* Fluid width */
-            box-sizing: border-box; /* Include padding in width */
+            width: 100%; /* Fluid width for responsiveness */
+            box-sizing: border-box;
+            opacity: 0; /* Start hidden for fade-in effect */
+            transform: translateY(20px); /* Start slightly below for slide-up effect */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Animation for appearance */
         }
+
+        /* Keyframe animation for container */
+        @keyframes fadeInSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Heading Styles */
         h1 {
-            color: #28a745; /* Green for success */
+            color: #2c3e50; /* Dark blue heading */
             margin-bottom: 25px;
-            font-size: 1.8em; /* Slightly larger heading */
+            font-size: 1.8em;
         }
+
+        /* Paragraph Styles */
         p {
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 20px;
         }
+
+        /* Link Styles */
+        a {
+            color: #3498db; /* Blue link color */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #2980b9; /* Darker blue on hover */
+            text-decoration: underline;
+        }
+
+        /* Review Button Specific Styles */
         .review-button {
             display: inline-block;
             background-color: #007bff; /* Blue button */
@@ -48,6 +78,7 @@
             font-weight: bold;
             transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
             box-shadow: 0 4px 10px rgba(0,123,255,0.2); /* Soft shadow for button */
+            margin-top: 10px; /* Space above button */
         }
         .review-button:hover {
             background-color: #0056b3; /* Darker blue on hover */
@@ -56,16 +87,91 @@
         .review-button:active {
             transform: translateY(0); /* Press effect */
         }
+
+        /* Section Specific Styles (to toggle visibility) */
+        .payment-section {
+            /* Initially visible unless status=success */
+        }
+        .review-section {
+            display: none; /* Initially hidden */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .review-button {
+                padding: 12px 25px;
+                font-size: 1.1em;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Payment Successful! 🎉</h1>
-        <p>Thank you for your payment to Gupta Medical Store. We truly appreciate your business!</p>
-        <p>Gupta Medical Store would love your feedback. Please take a moment to post a review to our profile:</p>
-        <!-- The target="_blank" and rel="noopener noreferrer" ensure the link opens in a new tab securely. -->
-        <a href="https://g.page/r/CXZtQWS9nFpsEBE/review" class="review-button" target="_blank" rel="noopener noreferrer">Leave a Review</a>
+        <!-- Payment Redirection Section -->
+        <div id="payment-section" class="payment-section">
+            <h1>Initiating Payment for Gupta Medical Store...</h1>
+            <p id="message">Please wait, you are being redirected to your UPI app for payment.</p>
+            <p id="manual-link"></p>
+            <p>If the payment app does not open automatically, please ensure you have a UPI app installed on your device.</p>
+        </div>
+
+        <!-- Review Page Section -->
+        <div id="review-section" class="review-section">
+            <h1 style="color: #28a745;">Payment Successful! 🎉</h1>
+            <p>Thank you for your payment to Gupta Medical Store. We truly appreciate your business!</p>
+            <p>Gupta Medical Store would love your feedback. Please take a moment to post a review to our profile:</p>
+            <a href="https://g.page/r/CXZtQWS9nFpsEBE/review" class="review-button" target="_blank" rel="noopener noreferrer">Leave a Review</a>
+        </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            const paymentSection = document.getElementById('payment-section');
+            const reviewSection = document.getElementById('review-section');
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentStatus = urlParams.get('status');
+
+            // Get the current page's URL without query parameters
+            const currentPageBaseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+
+            // The callback URL for UPI app after successful payment will point back to this page
+            // with a '?status=success' parameter.
+            const successCallbackUrl = currentPageBaseUrl + "?status=success";
+
+            // The UPI payment link with the callback URL
+            const upiLink = "upi://pay?pa=9044022171@okbizaxis&pn=Gupta%20Medical%20Store&mc=5912&aid=uGICAgMCI0fa4LQ&ver=01&mode=01&tr=BCR2DN4TWD55JFQW&cu=" + encodeURIComponent(successCallbackUrl);
+
+            if (paymentStatus === 'success') {
+                // If the URL has '?status=success', show the review section
+                paymentSection.style.display = 'none';
+                reviewSection.style.display = 'block';
+                document.title = "Payment Successful!"; // Update title for review page
+            } else {
+                // Otherwise, show the payment section and attempt redirect
+                paymentSection.style.display = 'block';
+                reviewSection.style.display = 'none';
+                document.title = "Redirecting to Payment..."; // Update title for payment page
+
+                // Attempt to redirect to the UPI app
+                window.location.href = upiLink;
+
+                // Provide a fallback message and a manual link if auto-redirect fails
+                setTimeout(function() {
+                    document.getElementById('message').innerText = "If you are not redirected, please click the link below or ensure a UPI app is installed:";
+                    document.getElementById('manual-link').innerHTML = '<a href="' + upiLink + '">Click here to pay for Gupta Medical Store</a>';
+                }, 1500); // Display fallback after 1.5 seconds
+            }
+        };
+    </script>
 </body>
 </html>
 
