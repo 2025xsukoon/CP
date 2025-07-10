@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to Payment...</title>
+    <title>Thank You for Your Payment!</title>
     <style>
         /* Basic styling for a clean, centered look */
         body {
@@ -13,7 +13,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f0f2f5; /* Light grey background */
+            background-color: #e8f5e9; /* Light green background for a "thank you" feel */
             color: #333;
             text-align: center;
             padding: 20px;
@@ -28,7 +28,7 @@
             box-sizing: border-box; /* Include padding in width */
         }
         h1 {
-            color: #2c3e50; /* Dark blue heading */
+            color: #28a745; /* Green for success */
             margin-bottom: 25px;
             font-size: 1.8em; /* Slightly larger heading */
         }
@@ -37,49 +37,35 @@
             line-height: 1.6;
             margin-bottom: 20px;
         }
-        a {
-            color: #3498db; /* Blue link color */
+        .review-button {
+            display: inline-block;
+            background-color: #007bff; /* Blue button */
+            color: #fff;
+            padding: 15px 30px; /* Larger padding for better touch target */
+            border-radius: 8px; /* Rounded button corners */
             text-decoration: none;
+            font-size: 1.2em; /* Larger font size for button */
             font-weight: bold;
-            transition: color 0.3s ease; /* Smooth transition for hover */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+            box-shadow: 0 4px 10px rgba(0,123,255,0.2); /* Soft shadow for button */
         }
-        a:hover {
-            color: #2980b9; /* Darker blue on hover */
-            text-decoration: underline;
+        .review-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect on hover */
+        }
+        .review-button:active {
+            transform: translateY(0); /* Press effect */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Initiating Payment for Gupta Medical Store...</h1>
-        <p id="message">Please wait, you are being redirected to your UPI app for payment.</p>
-        <p id="manual-link"></p>
-        <p>If the payment app does not open automatically, please ensure you have a UPI app installed on your device.</p>
+        <h1>Payment Successful! 🎉</h1>
+        <p>Thank you for your payment to Gupta Medical Store. We truly appreciate your business!</p>
+        <p>Gupta Medical Store would love your feedback. Please take a moment to post a review to our profile:</p>
+        <!-- The target="_blank" and rel="noopener noreferrer" ensure the link opens in a new tab securely. -->
+        <a href="https://g.page/r/CXZtQWS9nFpsEBE/review" class="review-button" target="_blank" rel="noopener noreferrer">Leave a Review</a>
     </div>
-
-    <script>
-        window.onload = function() {
-            // IMPORTANT: Replace "https://yourwebsite.com/review.html" with the actual URL where you host your review.html file.
-            // This 'cu' (callback URL) parameter tells the UPI app where to redirect after a successful payment.
-            // You MUST update this URL after you've deployed your review.html.
-            var reviewPageUrl = "https://yourwebsite.com/review.html"; // <--- UPDATE THIS PLACEHOLDER URL!
-
-            // The UPI payment link with the callback URL for successful payment
-            // encodeURIComponent is used to ensure the URL is properly formatted for the UPI intent.
-            var upiLink = "upi://pay?pa=9044022171@okbizaxis&pn=Gupta%20Medical%20Store&mc=5912&aid=uGICAgMCI0fa4LQ&ver=01&mode=01&tr=BCR2DN4TWD55JFQW&cu=" + encodeURIComponent(reviewPageUrl);
-
-            // Redirect the user's browser to the UPI link.
-            // This will attempt to open the UPI app on their device.
-            window.location.href = upiLink;
-
-            // Optional: Provide a fallback message and a manual link
-            // This helps users if the automatic redirection doesn't work (e.g., no UPI app installed).
-            setTimeout(function() {
-                document.getElementById('message').innerText = "If you are not redirected, please click the link below or ensure a UPI app is installed:";
-                document.getElementById('manual-link').innerHTML = '<a href="' + upiLink + '">Click here to pay for Gupta Medical Store</a>';
-            }, 1500); // Display fallback after 1.5 seconds
-        };
-    </script>
 </body>
 </html>
 
