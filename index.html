@@ -1,23 +1,85 @@
-<!doctype html>
-<title>Site Maintenance</title>
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-<style>
-  html, body { padding: 0; margin: 0; width: 100%; height: 100%; }
-  * {box-sizing: border-box;}
-  body { text-align: center; padding: 0; background: #87CEEB; color: #000; font-family: Open Sans; }
-  h1 { font-size: 80px; font-weight: 100; text-align: center;}
-  body { font-family: Open Sans; font-weight: 100; font-size: 30px; color: #000; text-align: center; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center;}
-  article { display: block; width: 700px; padding: 50px; margin: 0 auto; }
-  a { color: #fff; font-weight: bold;}
-  a:hover { text-decoration: none; }
-  svg { width: 75px; margin-top: 1em; }
-</style>
-
-<article>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 202.24 202.24"><defs><style>.cls-1{fill:#fff;}</style></defs><title>Asset 3</title><g id="Layer_2" data-name="Layer 2"><g id="Capa_1" data-name="Capa 1"><path class="cls-1" d="M101.12,0A101.12,101.12,0,1,0,202.24,101.12,101.12,101.12,0,0,0,101.12,0ZM159,148.76H43.28a11.57,11.57,0,0,1-10-17.34L91.09,31.16a11.57,11.57,0,0,1,20.06,0L169,131.43a11.57,11.57,0,0,1-10,17.34Z"/><path class="cls-1" d="M101.12,36.93h0L43.27,137.21H159L101.13,36.94Zm0,88.7a7.71,7.71,0,1,1,7.71-7.71A7.71,7.71,0,0,1,101.12,125.63Zm7.71-50.13a7.56,7.56,0,0,1-.11,1.3l-3.8,22.49a3.86,3.86,0,0,1-7.61,0l-3.8-22.49a8,8,0,0,1-.11-1.3,7.71,7.71,0,1,1,15.43,0Z"/></g></g></svg>
-    <h1>We&rsquo;ll be back soon!</h1>
-    <div>
-        <p>Sorry for the inconvenience. We&rsquo;re performing some maintenance at the moment. If you need to you can always follow us on <a href="http://t.me/@startwincare/">Telegram</a> for updates, otherwise we&rsquo;ll be back up shortly!</p>
-        <p>&mdash; The [startwin] Team</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Payment...</title>
+    <style>
+        /* Basic styling for a clean, centered look */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5; /* Light grey background */
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff; /* White background for the content box */
+            padding: 40px;
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Soft shadow */
+            max-width: 500px;
+            width: 100%; /* Fluid width */
+            box-sizing: border-box; /* Include padding in width */
+        }
+        h1 {
+            color: #2c3e50; /* Dark blue heading */
+            margin-bottom: 25px;
+            font-size: 1.8em; /* Slightly larger heading */
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        a {
+            color: #3498db; /* Blue link color */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease; /* Smooth transition for hover */
+        }
+        a:hover {
+            color: #2980b9; /* Darker blue on hover */
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Initiating Payment for Gupta Medical Store...</h1>
+        <p id="message">Please wait, you are being redirected to your UPI app for payment.</p>
+        <p id="manual-link"></p>
+        <p>If the payment app does not open automatically, please ensure you have a UPI app installed on your device.</p>
     </div>
-</article>
+
+    <script>
+        window.onload = function() {
+            // IMPORTANT: Replace "https://yourwebsite.com/review.html" with the actual URL where you host your review.html file.
+            // This 'cu' (callback URL) parameter tells the UPI app where to redirect after a successful payment.
+            // You MUST update this URL after you've deployed your review.html.
+            var reviewPageUrl = "https://yourwebsite.com/review.html"; // <--- UPDATE THIS PLACEHOLDER URL!
+
+            // The UPI payment link with the callback URL for successful payment
+            // encodeURIComponent is used to ensure the URL is properly formatted for the UPI intent.
+            var upiLink = "upi://pay?pa=9044022171@okbizaxis&pn=Gupta%20Medical%20Store&mc=5912&aid=uGICAgMCI0fa4LQ&ver=01&mode=01&tr=BCR2DN4TWD55JFQW&cu=" + encodeURIComponent(reviewPageUrl);
+
+            // Redirect the user's browser to the UPI link.
+            // This will attempt to open the UPI app on their device.
+            window.location.href = upiLink;
+
+            // Optional: Provide a fallback message and a manual link
+            // This helps users if the automatic redirection doesn't work (e.g., no UPI app installed).
+            setTimeout(function() {
+                document.getElementById('message').innerText = "If you are not redirected, please click the link below or ensure a UPI app is installed:";
+                document.getElementById('manual-link').innerHTML = '<a href="' + upiLink + '">Click here to pay for Gupta Medical Store</a>';
+            }, 1500); // Display fallback after 1.5 seconds
+        };
+    </script>
+</body>
+</html>
+
